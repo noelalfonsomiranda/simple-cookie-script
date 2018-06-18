@@ -34,11 +34,13 @@ myCustomThirdPartyPlugin: {
     },
     cookieName: 'devs_custom_cookie-value',
     description: 'Brief description about this third party plugin.',
+    enable: true,
     name: 'Third Party Name'
   },
 ```
  - `cookieName` key should be the value that you set on `data-cookiescript` from scripts section
  - on `action` key, `first parameter` should also like `cookieName` value and the `third or last parameter` will be the cookie created by the third party cookie.
+ - `enable` key should be `true` if this cookie can be control by the user.
  - you can add allowed cookies which cannot be control by the user, just follow the below property snippet's structure.
  - **Example:**
 ```js
@@ -52,7 +54,7 @@ allowedCookieKey: {
     name: 'allowedCookieName'
   },
 ```
- - the `handleCookies('allowed', null, null)` and `cookieName: 'allowed'` will be default for this property
+ - the `enable` key should be `false`, `handleCookies('allowed', null, null)` and `cookieName: 'allowed'` will be default for this property
 
 * on `function cookieBar()`
  - edit the href value depends on the link of your cookie policy page.
