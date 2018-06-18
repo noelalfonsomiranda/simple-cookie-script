@@ -11,7 +11,7 @@ body {
   display: none;
   left: 50%;
   max-width: 500px;
-  min-height: 200px;
+  overflow-y: auto;
   position: fixed;
   top: 50%;
   width: 100%;
@@ -25,16 +25,21 @@ body {
 }
 
 #cookie-modal .modal-container {
-  padding: 25px 15px 15px;
-  position: relative;
+    padding: 25px 15px 15px;
+    position: relative;
+
+    max-height: 350px;
+    min-height: 200px;
+    overflow-y: auto;
 }
 
 #cookie-modal .modal-close {
   cursor: pointer;
   position: absolute;
-  right: 10px;
-  text-decoration: underline;
-  top: 10px;
+  right: 15px;
+  top: 0;
+  z-index: 1;
+  background-color: #FFFFFF;
 }
 
 #cookie-modal .bulk-action {
@@ -50,9 +55,9 @@ body {
   border-bottom: 1px solid #AEAEAE;
 }
 
-/* #cookie-modal .cookie-services .cookie-item:last-child {
-  border-bottom: 0;
-} */
+#cookie-modal .cookie-services .cookie-item small {
+  color: lightgray;
+}
 
 #cookie-modal .cookie-services .cookie-item h3 {
   color: #333333;
@@ -81,6 +86,12 @@ body {
   color: white;
 }
 
+#cookie-modal button:disabled {
+  background: #AEAEAE !important;
+  color: grey !important;
+  cursor: not-allowed;
+}
+
 #cookie-modal button.save-settings {
   background: #1d74b7;
   border: 1px solid #AEAEAE;
@@ -88,8 +99,12 @@ body {
   cursor: pointer;
   float: right;
   font-size: 14px;
-  margin: 20px 10px;
+  margin: 10px;
   padding: 5px 12px;
+}
+
+#cookie-modal .save-container {
+  background: #FFFFFF;
 }
 
 /* ================= */
@@ -147,8 +162,7 @@ body {
   margin-left:20px
 }
 .cookie-bar button {
-  /* background-color: green; */
-  background-color:#1ba2e2;
+  background-color: green;
   border:0;
   color:#fff;
   cursor:pointer;

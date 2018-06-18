@@ -1,24 +1,23 @@
 // Cookie Services Start
 var cookieServices = {
-  // Important, googtrans is the exact cookie name created by the third party.
-  // google_trans is depends on that you've set on data-cookiescript on your script tag
-
   googleTranslate: {
     action: function(status) {
       handleCookies('google_trans', status, 'googtrans');
     },
     cookieName: 'google_trans',
     description: 'Google\'s free service instantly translates words, phrases, and web pages between English and over 100 other languages.',
-    name: 'Google Translate'
+    enable: true,
+    name: 'googtrans'
   },
-  // googleTranslatesss: {
-  //   action: function(status) {
-  //     handleCookies('zzzz', status, 'googtransz');
-  //   },
-  //   cookieName: 'zzzz',
-  //   description: 'testssss',
-  //   name: 'Google Translatesssss'
-  // },
+  cookie_script: {
+    action: function() {
+      handleCookies('allowed', null, null);
+    },
+    cookieName: 'allowed',
+    description: 'A cookie required for the site to remember the cookie preference for this site.',
+    enable: false,
+    name: 'cookie_script'
+  },
 }
 // Cookie Services End
 
@@ -125,7 +124,7 @@ function removeCookie(element) {
 
   // Iterate created cookie services
   Object.values(cookieServices).map(function(item) {
-    cookieModalItem(item.name, item.description, item.action, item.cookieName);
+    cookieModalItem(item);
   })
 })();
 
@@ -180,52 +179,67 @@ function cookieModal() {
 
   $('body').prepend( 
     "<div id='cookie-modal'>" +
+      "<div class='modal-close'>" +
+        "<p onclick='closeModal()'>X</p>" +
+      "</div>" +
       "<div class='modal-container'>" +
-        "<div class='modal-close'>" +
-          "<p  onclick='closeModal()'>X close</p>" +
-        "</div>" +
         "<div class='bulk-action'>" +
           "<button onclick='actionAllCookies(true)'>✓ Allow All</button>" +
           "<button onclick='actionAllCookies(false)'>✗ Deny All</button>" +
         "</div>" +
         "<div class='modal-content'></div>" +
+      "</div>" +
+      "<div class='save-container'>" +
         "<button class='save-settings' onclick='reloadPage()'>SAVE</button>" +
       "</div>" +
     "</div>"
   )
 }
 
-function cookieModalItem(name, description, action, cookie) {
-  var className = name.toLowerCase().replace(" ", "-");
+function cookieModalItem(item) {
+  var className = item.name.toLowerCase().replace(" ", "-");
   var cookies = getCookie('cookie_script') ? JSON.parse(getCookie('cookie_script')) : [];
+  var isEnable = function() {
+    if (!item.enable) {
+      return 'disabled'
+    }
+    return ''
+  }
+  var cookieHeader = function() {
+    if (!item.enable) {
+      return " <small>Always Allowed</small>"
+    }
+
+    return ''
+  }
 
   $('.modal-content').append(
     "<div class='cookie-services'>" +
       "<div class='cookie-item'>" +
-        "<h3>" + name + "</h3>" +
-        "<p>" + description + "</p>" +
+        "<h3>" + item.name + cookieHeader() + "</h3>" +
+        "<p>" + item.description + "</p>" +
         "<div class='cookie-actions'>" +
-          "<button class='allow-cookie allow-" + className + ' ' + (cookies && cookies.join(' ')) + "'>✓ Allow</button>" +
-          "<button class='deny-cookie deny-" + className + ' ' + (cookies && cookies.join(' ')) + "'>✗ Deny</button>" +
+          "<button " + isEnable() + " class='allow-cookie allow-" + className + ' ' + (cookies && cookies.join(' ')) + "'>✓ Allow</button>" +
+          "<button " + isEnable() + " class='deny-cookie deny-" + className + ' ' + (cookies && cookies.join(' ')) + "'>✗ Deny</button>" +
         "</div>" +
       "</div>" +
     "</div>"
   );
 
   $(".allow-" + className).on('click', function() {
-    action(true);
+    item.enable && item.action(true);
     
     $(this).addClass('active');
     $(".deny-" + className).removeClass('active');
   });
   $(".deny-" + className).on('click', function() {
-    action(false);
+    item.enable && item.action(false);
     
     $(this).addClass('active');
     $(".allow-" + className).removeClass('active');
   });
 
-  if ($('.allow-' + className).hasClass(cookie)) {
+  if ($('.allow-' + className).hasClass(item.cookieName)) {
     $('.allow-' + className).addClass('active');
     $('.deny-' + className).removeClass('active');
   } else {
